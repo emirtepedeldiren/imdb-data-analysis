@@ -1,7 +1,9 @@
 # 🎬 Bir Film Gişede Tutar mı?
 
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/emirtepedeldiren/imdb-data-analysis/blob/master/imdb_analizi_colab.ipynb)
+
 TMDB 5000 Movies veri seti üzerinde keşifsel veri analizi ve gişe başarısı tahmini.
-Bootcamp final projesi.
+Huawei Student Developers — Veri Bilimi ve Makine Öğrenmesi bootcamp final projesi.
 
 ## Problem
 

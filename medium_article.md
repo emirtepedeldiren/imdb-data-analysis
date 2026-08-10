@@ -379,4 +379,4 @@ Ama unutmayın: bu model beş seferden ikisinde yanılıyor. Yeşil ışığı o
 
 ---
 
-*Bu yazı, Huawei Student Developers Veri Bilimi ve Makine Öğrenmesi final projesi kapsamında hazırlanmıştır. Tüm kod ve grafikler Colab notebook'unda: https://colab.research.google.com/drive/15lBCGCA53hVWWbVTLntPol1iSwhPVl-z?usp=sharing · GitHub: [repo linki]*
+*Bu yazı, Huawei Student Developers Veri Bilimi ve Makine Öğrenmesi final projesi kapsamında hazırlanmıştır. Tüm kod ve grafikler Colab notebook'unda: https://colab.research.google.com/drive/15lBCGCA53hVWWbVTLntPol1iSwhPVl-z?usp=sharing · GitHub: https://github.com/emirtepedeldiren/imdb-data-analysis*
