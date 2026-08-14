@@ -1,20 +1,18 @@
 # Bir Filmin Gişede Tutacağını Önceden Bilebilir miyiz?
 
-## 4.803 filmlik bir veri setinde cevap ararken, verinin bana dört kez yalan söylediğini fark ettim
-
 ---
 
-James Cameron 2009'da Avatar'ı çekmek için 237 milyon dolar harcadı. Film dünya çapında 2,78 milyar dolar hasılat yaptı — bütçesinin yaklaşık on iki katı. Bugün bunu bir başarı hikâyesi olarak anlatıyoruz, ama 2007'de o parayı onaylayan yöneticiler için ortada hikâye falan yoktu. Sadece bir bahis vardı.
+James Cameron 2009'da Avatar'ı çekmek için 237 milyon dolar harcadı. Film dünya çapında 2,78 milyar dolar hasılat yaptı. Bütçesinin yaklaşık on iki katı. Bugün bunu bir başarı hikâyesi olarak anlatıyoruz, ama 2007'de o parayı onaylayan yöneticiler için ortada hikâye falan yoktu. Sadece bir bahis vardı.
 
 Sinema sektörünün en pahalı sorusu bu: bir film, daha tek karesi çekilmeden, tutup tutmayacağını ele veriyor mu?
 
-Bu soruyu bir veri setine sormaya karar verdim. Elimde The Movie Database'den derlenmiş 4.803 filmlik bir arşiv vardı; bütçeler, hasılatlar, türler, süreler, vizyon tarihleri. Amacım basitti: önce verinin ne söylediğine bakmak, sonra da bir film vizyona girmeden önce bilinebilecek bilgilerle gişe başarısını tahmin eden bir model kurmak.
+Bu soruyu bir veri setine sormaya karar verdim. Elimde Kaggle'dan alınmış 4.803 filmlik devasa bir veri seti vardı; bütçeler, hasılatlar, türler, süreler, vizyon tarihleri. Amacım basitti: önce verinin ne söylediğine bakmak, sonra da bir film vizyona girmeden önce bilinebilecek bilgilerle gişe başarısını tahmin eden bir model kurmak.
 
 Sonuç, beklediğimden farklı bir yere çıktı. Modelin doğruluk oranı hikâyenin en ilginç kısmı değildi. En ilginç kısım, yol boyunca karşıma çıkan dört yanlış sayıydı. Dördü de sessizdi — hiçbiri hata vermedi, hiçbiri uyarı üretmedi. Her biri gayet makul görünen bir rakam verdi ve o rakam yanlıştı.
 
 ---
 
-## Elimdeki veri
+## Elimdeki Veri
 
 TMDB 5000 Movie Dataset, Kaggle üzerinden erişilebilen açık bir veri seti. 4.803 satır, 20 kolon. Her satır bir filmi temsil ediyor ve şunları içeriyor:
 
@@ -23,63 +21,66 @@ TMDB 5000 Movie Dataset, Kaggle üzerinden erişilebilen açık bir veri seti. 4
 - Yapım şirketleri, orijinal dil
 - TMDB kullanıcı puanı, oy sayısı ve popülerlik skoru
 
-Veri 1916'dan 2016'ya uzanıyor, ama ağırlığı belirgin şekilde yakın döneme kaymış: filmlerin yaklaşık yüzde 71'i 2000 sonrasına ait. Yüzde 94'ü de İngilizce. Yani teknik olarak "dünya sineması" değil, pratikte Hollywood'a bakıyoruz.
+Veri 1916'dan 2017'ye uzanıyor, ama ağırlığı belirgin şekilde yakın döneme kaymış: filmlerin yaklaşık yüzde 73'ü 2000 sonrasına ait. Yüzde 94'ü de İngilizce. Yani teknik olarak "dünya sineması" değil, pratikte Hollywood'a bakıyoruz.
 
-İlk iş olarak eksik değerlere baktım. Sonuç fena görünmüyordu: film sitesi adresi kolonunun yüzde 64'ü boştu, slogan kolonunun dörtte biri eksikti, birkaç filmin süresi kayıptı. Bütçe ve hasılat kolonlarında ise hiç eksik değer yoktu.
+İlk iş olarak eksik değerlere baktım. Sonuç fena görünmüyordu: film sitesi adresi kolonunun yüzde 64'ü boştu, slogan kolonunun yüzde 18'i eksikti, birkaç filmin süresi kayıptı. Bütçe ve hasılat kolonlarında ise hiç eksik değer yoktu.
 
 Rahatlayıp devam ettim. Etmemeliydim.
 
 ---
 
-## Veriler bana yalan söyledi
+## Veriler Bana Yalan Söyledi
 
-Bütçe kolonunda eksik değer olmamasının sebebi, verinin eksiksiz olması değildi. Eksik değerlerin boş bırakılmak yerine **sıfır yazılmış** olmasıydı.
+Bütçe kolonunda eksik değer olmamasının sebebi, verinin eksiksiz olması değildi. Eksik değerlerin boş bırakılmak yerine sıfır yazılmış olmasıydı.
 
 Sayınca ortaya çıkan tablo şuydu: 1.037 filmin bütçesi ve 1.427 filmin hasılatı sıfır görünüyordu. Bir filmin gerçekten sıfır dolara çekilmesi mümkün değil. Bu satırlar "bilinmiyor" demekti, ama kod bunu "sıfır" olarak okuyordu.
 
 Farkın büyüklüğünü görmek için ortalama bütçeyi iki şekilde hesapladım. Sıfırlar dahil edildiğinde ortalama 29 milyon dolar çıkıyordu. Onları eksik kabul edip dışarıda bıraktığımda 37 milyona yükseldi. Aradaki fark yüzde 28.
 
-Bunu fark etmeseydim, sonrasında yazdığım her cümle sistematik olarak yanlış olacaktı. Ve hiçbir yerde kırmızı bir uyarı çıkmayacaktı.
+Bunu fark etmeseydim, sonrasında yazdığım her cümle sistematik olarak yanlış olacaktı. Ve hiçbir yerde kırmızı bir uyarı çıkmayacaktı. Verinin bana söylediği ilk yalan buydu; arkasından üç tane daha gelecekti.
 
-Buradan çıkardığım ders şu oldu: eksik veriyi kontrol etmek, eksik değer sayısına bakmakla bitmiyor. Sayısal kolonlarda sıfırların, kategorik kolonlarda "Unknown" ya da "N/A" gibi değerlerin de aslında "veri yok" anlamına gelebileceğini akılda tutmak gerekiyor.
+Buradan çıkardığım ders şu oldu: eksik veriyi kontrol etmek, eksik değer sayısına bakmakla bitmiyor. Sayısal kolonlarda sıfırların, kategorik kolonlarda "Unknown" ya da "NaN" gibi değerlerin de aslında "veri yok" anlamına gelebileceğini akılda tutmak gerekiyor.
 
 Bütçesi veya hasılatı bilinmeyen filmleri çıkardığımda elimde 4.803 filmden 3.215'i kaldı. Neredeyse üçte birini kaybettim ve bu kaybın rastgele olmadığını biliyorum: finansal bilgi genelde büyük stüdyo yapımları için kayıtlı tutuluyor, küçük bağımsız filmler kayıtlardan düşüyor. Yani elimdeki veri, sinemanın tamamını değil, görünür kısmını temsil ediyor.
 
 ---
 
-## "Başarılı film" neye denir?
+## "Başarılı Film" Neye Denir?
 
-Modelin tahmin edeceği şeyi tanımlamam gerekiyordu. İlk akla gelen "hasılatı bütçesinden yüksekse kâr etmiştir" yaklaşımı yanıltıcı, çünkü veri setindeki bütçe rakamı yalnızca yapım maliyetini içeriyor. Pazarlama ve dağıtım masrafları o rakamın içinde yok ve bunlar küçük kalemler değil.
+Modelin tahmin edeceği şeyi tanımlamam gerekiyordu. İlk akla gelen "hasılatı bütçesinden yüksekse kâr etmiştir" yaklaşımı yanıltıcıydı, çünkü veri setindeki bütçe rakamı yalnızca yapım maliyetini içeriyor. Pazarlama ve dağıtım masrafları o rakamın içinde yok ve bunlar küçük kalemler değil.
 
-Sektörde kabaca şöyle bir kural işliyor: bir film başabaş noktasını, yapım bütçesinin yaklaşık iki katında geçer. Ben de bu eşiği kullandım — hasılatı bütçesinin en az iki katı olan filmleri "başarılı", olmayanları "başarısız" saydım.
+Sektörde kabaca şöyle bir kural işliyor: bir film başabaş noktasını, yapım bütçesinin yaklaşık iki katında geçer. Ben de bu eşiği kullandım. Hasılatı bütçesinin en az iki katı olan filmleri "başarılı", olmayanları "başarısız" saydım.
 
 Bu tanımla elimdeki 3.215 filmin yüzde 56,1'i başarılı sınıfına girdi. Dengeli bir dağılım, ki bu ilerisi için önemli olacak.
 
 ---
 
-## Ortalama diye bir şey yok
+## Ortalama Diye Bir Şey Yok
 
 Yatırım getirisine bakmaya başladığımda ilk hesapladığım sayı ortalamaydı: 11,13. Yani filmler ortalamada bütçelerinin on bir katını kazanıyordu.
 
 Bu rakam saçmaydı. Medyana baktığımda 2,30 çıkıyordu.
 
-Aradaki uçurumun sebebini bulmak zor olmadı. 2007 yapımı *Paranormal Activity* 15 bin dolara çekilmiş ve 193 milyon dolar hasılat yapmıştı. Getirisi 12.890 kat. Tek bir film, 3.215 filmlik bir veri setinin ortalamasını tek başına beşe katlıyordu.
+Aradaki uçurumun sebebini bulmak zor olmadı. 2007 yapımı *Paranormal Activity* 15 bin dolara çekilmiş ve 193 milyon dolar hasılat yapmıştı. Getirisi 12.890 kat. Yalnızca bu film, 3.215 filmlik veri setinin ortalamasını 7,1'den 11,1'e çıkarıyordu. Onu tamamen çıkarsam bile ortalama hâlâ medyanın üç katıydı — çünkü arkasında sıra sıra benzerleri vardı.
 
-Bu, ikinci yalan noktasıydı ve sonrasındaki bütün analizin şeklini belirledi: uç değerlerin bu kadar baskın olduğu bir dağılımda ortalama hiç kimseyi temsil etmiyor. Yazının geri kalanında göreceğiniz her getiri rakamı medyan.
+Bu, ikinci yalan noktasıydı ve sonrasındaki bütün analizin şeklini belirledi: uç değerlerin bu kadar baskın olduğu bir dağılımda ortalama hiç kimseyi temsil etmiyor. Yazının geri kalanında göreceğiniz her getiri rakamı medyandır.
 
 ---
 
-## Orta sınıfın ölümü
+## Orta Sınıfın Ölümü
 
-Bütçe ile hasılat arasında güçlü bir ilişki var. İkisinin logaritmasını aldığımda korelasyon 0,601 çıkıyor. Yani pahalı filmler gerçekten daha çok kazanıyor — burada sürpriz yok.
+Bütçe ile hasılat arasında güçlü bir ilişki var; ikisi arasındaki korelasyon 0,70. Yani pahalı filmler gerçekten daha çok kazanıyor — burada sürpriz yok.
 
-Sürpriz, kazanç yerine **kârlılığa** baktığımda ortaya çıktı. Filmleri bütçelerine göre beşe böldüm ve her grubun başarı oranını hesapladım. Beklediğim şey düz bir eğilimdi: ya pahalı filmler daha güvenli çıkacaktı, ya ucuz filmler.
+(Birazdan korelasyon ölçmenin ne kadar aldatıcı olabileceğini göreceğiz. Bu rakama güvenebiliriz: sıralama bazlı ölçümle de 0,67 çıkıyor, yani ikisi birbirini doğruluyor.)
+
+Sürpriz, kazanç yerine kârlılığa baktığımda ortaya çıktı. Filmleri bütçelerine göre yaklaşık eşit büyüklükte beş gruba ayırdım ve her grubun başarı oranını hesapladım. Beklediğim şey düz bir eğilimdi: ya pahalı filmler daha güvenli çıkacaktı, ya ucuz filmler.
 
 Çıkan şekil ikisi de değildi.
 
 ![Bütçe grubuna göre başarı oranı](figures/05_butce_gruplari.png)
+*Filmler bütçelerine göre beş gruba ayrıldı; her grupta 580 ile 725 arasında film var.*
 
-En düşük bütçeli grup — medyan 3,5 milyon dolar — yüzde 66 başarı oranıyla listenin en tepesinde. Bütçe yükseldikçe oran düşüyor ve medyan 28 milyon dolar civarında yüzde 48'e kadar iniyor. Sonra beklenmedik bir şey oluyor: yükselmeye başlıyor. En pahalı grup, medyan 100 milyon dolarlık yapımlar, yüzde 59,5 ile ortalamanın üzerine geri çıkıyor.
+Bütçesi 8 milyon doların altındaki filmlerin yüzde 66'sı parasını çıkarıyor — listenin en tepesi. Bütçe yükseldikçe oran düşüyor ve 20-35 milyon dolar bandında yüzde 48'e kadar iniyor. Sonra beklenmedik bir şey oluyor: yükselmeye başlıyor. 65 milyon doların üzerindeki yapımlar yüzde 59,5 ile ortalamanın üzerine geri çıkıyor.
 
 İlişki düz bir çizgi değil, U şeklinde.
 
@@ -89,7 +90,7 @@ Bu bulguyu aklınızın bir köşesinde tutun. Birazdan modelin neden tuhaf davr
 
 ---
 
-## Korku filminin sessiz üstünlüğü
+## Korku Filmlerinin Sessiz Üstünlüğü
 
 Türlere göre getiriye baktığımda tablo netleşti.
 
@@ -105,13 +106,13 @@ Bir not: bunlar medyan değerler, garanti değil. Yüksek getirili bir türde ç
 
 ---
 
-## Eylül ayının laneti
+## Eylül Ayı Laneti
 
 En beklenmedik bulgu çıkış takviminde saklıydı.
 
 ![Çıkış ayına göre gişe başarısı](figures/07_ay_hit_orani.png)
 
-Haziranda vizyona giren filmlerin yüzde 67,4'ü parasını çıkarıyor. Eylülde bu oran yüzde 43,3'e düşüyor. Aradaki fark 24 puan — ki bu, analiz boyunca gördüğüm en büyük tek değişken etkisi.
+Haziranda vizyona giren filmlerin yüzde 67,4'ü parasını çıkarıyor. Eylülde bu oran yüzde 43,3'e düşüyor. Aradaki fark 24 puan — çekim öncesi bilinebilen değişkenler arasında gördüğüm en büyük etki. Bütçe grubunun yarattığı fark 18 puan, türün yarattığı fark 20 puanda kalıyor.
 
 Yaz tatili ve yılbaşı sezonunun güçlü olması beklenen bir şey. İşin ilginç tarafı şu: eylül, veri setinde **en çok film çıkan ay.** 383 film. Yani stüdyolar en kötü aya en çok filmi yığıyor.
 
@@ -119,7 +120,7 @@ Bunun sektörde bir adı var. Yaz blockbuster'ları bitmiş, ödül sezonu henü
 
 ---
 
-## İyi film mi, çok kazandıran film mi?
+## İyi Film mi, Çok Kazandıran Film mi?
 
 Merak ettiğim bir soru daha vardı: iyi film yapmak para kazandırıyor mu?
 
@@ -141,7 +142,7 @@ Bu detay, projenin en kritik kararına götürdü beni.
 
 ---
 
-## Kendime kasıtlı olarak zor bir model kurdum
+## Modelden Sakladıklarım
 
 Elimde tahmin gücü çok yüksek üç değişken vardı: popülerlik skoru, oy sayısı ve kullanıcı puanı. Bunları modele eklesem doğruluk oranı ciddi biçimde yükselirdi.
 
@@ -161,11 +162,11 @@ Sevindim. Erken sevinmişim.
 
 ---
 
-## Dördüncü yalan
+## Model Bana İyi Haber Verdi, İnanmadım
 
 Tek bir test setine güvenmemek gerektiğini biliyordum, o yüzden beş katlı çapraz doğrulama çalıştırdım. Sonuç yüzde 55,4 çıktı.
 
-Baseline'ın altında. Test setinde yüzde 66, çapraz doğrulamada yüzde 55. Bu kadar büyük bir fark olamazdı.
+Baseline'ın altında. Test setinde yüzde 66, çapraz doğrulamada yüzde 55. Bu kadar büyük bir fark olamazdı — dördüncü yalanla karşı karşıyaydım.
 
 Sebebi bulmak biraz sürdü. Scikit-learn'den varsayılan ayarlarla çapraz doğrulama istediğinizde, veriyi **karıştırmadan** bölüyor. Bu veri setinde ölümcül bir hata, çünkü dosya kabaca bütçeye göre sıralı: ilk satırlarda Avatar gibi 200 milyon dolarlık yapımlar var, sonlara doğru 15 bin dolarlık *Paranormal Activity*. Karıştırmadan bölünce her kat tamamen farklı bir bütçe dünyasından oluşuyor ve model hiç görmediği bir evrende sınava sokuluyordu.
 
@@ -175,7 +176,7 @@ Sebebi bulmak biraz sürdü. Scikit-learn'den varsayılan ayarlarla çapraz doğ
 
 ---
 
-## Modelin bana öğrettiği şey
+## Modelin Bana Öğrettiği Şey
 
 Random Forest'ın hangi değişkenlere ağırlık verdiğine baktığımda çıkış yılı ve bütçe başa baş gidiyordu; ikisi birlikte toplam önemin yaklaşık yüzde 40'ını oluşturuyordu. Tür bilgisinin katkısı şaşırtıcı derecede küçüktü — hiçbir tür tek başına yüzde 3'ü geçmiyordu.
 
@@ -191,7 +192,7 @@ U eğrisinin iki ucu da kazanıyor. Model bunu kendi başına öğrenmişti.
 
 ---
 
-## Geriye ne kaldı
+## Geriye Ne Kaldı
 
 Model, hiçbir şey bilmeyen bir tahmincinin yaklaşık altı puan önüne geçebiliyor. Etkileyici bir rakam değil ve olmasını da beklememeliyiz.
 
@@ -208,26 +209,19 @@ Bu projeden aklımda kalan asıl şey ise şu dört rakam oldu:
 
 Dördü de sessizce yanlıştı. Kod her seferinde çalıştı, hiçbir uyarı vermedi, gayet makul bir sayı üretti. Veri biliminde asıl iş kodu çalıştırmak değilmiş; çıkan sayıya "bu gerçekten mantıklı mı?" diye sormakmış.
 
-### Bu analizin sınırları
+### Bu Analizin Sınırları
 
 - Finansal bilgisi olan 3.215 film üzerinden çalıştım; küçük bağımsız yapımlar eksik temsil ediliyor
 - Bütçeler enflasyona göre düzeltilmedi, 1916 ile 2016 dolarları aynı kabul edildi
-- Filmlerin yüzde 94'ü İngilizce, dolayısıyla sonuçlar esas olarak Hollywood'u anlatıyor
+- Analiz ettiğim filmlerin yüzde 96'sı İngilizce, dolayısıyla sonuçlar esas olarak Hollywood'u anlatıyor
 - İki katlık başabaş kuralı bir yaklaşımdır, kesin bir muhasebe değil
-
-### Bundan sonrası
-
-- Oyuncu ve yönetmen bilgisini eklemek, muhtemelen en büyük iyileşmeyi sağlayacaktır
-- Film özetlerinden metin özellikleri çıkarmak denenebilir
-- Bütçeleri bugünkü değerine çevirmek, eski filmlerin karşılaştırmasını sağlıklı hale getirir
-- XGBoost gibi daha güçlü algoritmalarla U eğrisi daha iyi modellenebilir
 
 ---
 
 **Kaynaklar ve kod**
 
 Analizin tamamı, tüm grafikler ve modelin kodu Google Colab notebook'unda çalıştırılabilir durumda:
-https://colab.research.google.com/drive/15lBCGCA53hVWWbVTLntPol1iSwhPVl-z?usp=sharing
+https://colab.research.google.com/github/emirtepedeldiren/imdb-data-analysis/blob/master/imdb_analizi_colab.ipynb
 
 Proje deposu: https://github.com/emirtepedeldiren/imdb-data-analysis
 
