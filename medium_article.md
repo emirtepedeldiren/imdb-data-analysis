@@ -6,7 +6,7 @@ James Cameron 2009'da Avatar'ı çekmek için 237 milyon dolar harcadı. Film d�
 
 Sinema sektörünün en pahalı sorusu bu: bir film, daha tek karesi çekilmeden, tutup tutmayacağını ele veriyor mu?
 
-Bu soruyu bir veri setine sormaya karar verdim. Elimde Kaggle'dan alınmış 4.803 filmlik devasa bir veri seti vardı; bütçeler, hasılatlar, türler, süreler, vizyon tarihleri. Amacım basitti: önce verinin ne söylediğine bakmak, sonra da bir film vizyona girmeden önce bilinebilecek bilgilerle gişe başarısını tahmin eden bir model kurmak.
+Bu soruyu bir veri setine sormaya karar verdim. Elimde Kaggle'dan alınmış 4.803 filmlik bir veri seti vardı; bütçeler, hasılatlar, türler, süreler, vizyon tarihleri. Amacım basitti: önce verinin ne söylediğine bakmak, sonra da bir film vizyona girmeden önce bilinebilecek bilgilerle gişe başarısını tahmin eden bir model kurmak.
 
 Sonuç, beklediğimden farklı bir yere çıktı. Modelin doğruluk oranı hikâyenin en ilginç kısmı değildi. En ilginç kısım, yol boyunca karşıma çıkan dört yanlış sayıydı. Dördü de sessizdi — hiçbiri hata vermedi, hiçbiri uyarı üretmedi. Her biri gayet makul görünen bir rakam verdi ve o rakam yanlıştı.
 
@@ -203,7 +203,7 @@ Popülerlik ve oy sayısını modele koysaydım çok daha yüksek bir doğruluk 
 Bu projeden aklımda kalan asıl şey ise şu dört rakam oldu:
 
 - Eksik değer kontrolü "hiç eksik yok" dedi — eksikler sıfır olarak saklanıyordu
-- Ortalama getiri 11 kat dedi — tek bir filmin etkisiydi, gerçek değer 2,3'tü
+- Ortalama getiri 11 kat dedi — birkaç uç değerin şişirdiği bir sayıydı, tipik film 2,3 kat kazanıyordu
 - Pearson korelasyonu 0,000 dedi — doğru ölçümle 0,335 çıktı
 - Çapraz doğrulama yüzde 55 dedi — veriyi karıştırmayı unutmuştum
 
