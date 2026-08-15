@@ -2,13 +2,28 @@
 
 ---
 
+Bir süre önce Christopher Nolan'ın bir röportajına denk geldim. Kendisine sorulan soru basitti: bir filmin bütçesi, o filmin başarısını belirler mi?
+
+Cevabı netti. Hayır.
+
+İkna olmamıştım. Çünkü aklıma hemen Avatar geldi.
+
 James Cameron 2009'da Avatar'ı çekmek için 237 milyon dolar harcadı. Film dünya çapında 2,78 milyar dolar hasılat yaptı. Bütçesinin yaklaşık on iki katı. Bugün bunu bir başarı hikâyesi olarak anlatıyoruz, ama 2007'de o parayı onaylayan yöneticiler için ortada hikâye falan yoktu. Sadece bir bahis vardı.
 
-Sinema sektörünün en pahalı sorusu bu: bir film, daha tek karesi çekilmeden, tutup tutmayacağını ele veriyor mu?
+Ortada bir çelişki var gibiydi. Sinemanın en tanınmış yönetmenlerinden biri paranın başarıyı satın almadığını söylüyordu; sektörün en büyük başarı hikâyesi ise tarihin en pahalı bahislerinden biriydi.
+
+Hangisi doğruydu? Daha da önemlisi: sinema sektörünün en pahalı sorusuna cevap verilebilir miydi — bir film, daha tek karesi çekilmeden tutup tutmayacağını ele veriyor mu?
 
 Bu soruyu bir veri setine sormaya karar verdim. Elimde Kaggle'dan alınmış 4.803 filmlik bir veri seti vardı; bütçeler, hasılatlar, türler, süreler, vizyon tarihleri. Amacım basitti: önce verinin ne söylediğine bakmak, sonra da bir film vizyona girmeden önce bilinebilecek bilgilerle gişe başarısını tahmin eden bir model kurmak.
 
 Sonuç, beklediğimden farklı bir yere çıktı. Modelin doğruluk oranı hikâyenin en ilginç kısmı değildi. En ilginç kısım, yol boyunca karşıma çıkan dört yanlış sayıydı. Dördü de sessizdi — hiçbiri hata vermedi, hiçbiri uyarı üretmedi. Her biri gayet makul görünen bir rakam verdi ve o rakam yanlıştı.
+
+Ama önce sinemanın manzarasına bakalım. Aşağıda analiz ettiğim 3.215 filmin tamamı var:
+
+![Sinemanın en büyük bahisleri](figures/04_butce_vs_hasilat.png)
+*Her nokta bir film. Kesikli çizginin üstünde kalanlar parasını çıkarmış, altındakiler çıkaramamış. Avatar sağ üstte; The Lone Ranger, 255 milyon dolarlık bütçesine rağmen çizginin epey altında.*
+
+Bu tabloda dikkat çeken şey, sol üstteki iki nokta. *Paranormal Activity* ve *The Blair Witch Project* — neredeyse hiç para harcamadan yüz milyonlar kazanmış iki film. Onlara döneceğiz.
 
 ---
 
@@ -193,6 +208,12 @@ U eğrisinin iki ucu da kazanıyor. Model bunu kendi başına öğrenmişti.
 ---
 
 ## Geriye Ne Kaldı
+
+Baştaki soruya dönelim. Nolan haklı mıydı?
+
+Kısmen. Para, gişe hasılatını gerçekten satın alıyor — bütçe ile hasılat arasındaki 0,70'lik ilişki bunu açıkça gösteriyor. Ama **kârlılığı** satın almıyor. 20-35 milyon dolarlık filmlerin yalnızca yüzde 48'i parasını çıkarabiliyorken, 14 milyon dolar medyan bütçeyle çekilen korku filmlerinin yüzde 67'si çıkarıyor. Lojistik regresyon da aynı şeyi söylüyordu: bütçe arttıkça iki katlık eşiği aşmak zorlaşıyor.
+
+Yani "büyük bütçe = başarı" denklemi yanlış. Ama "bütçenin hiç önemi yok" da değil — önemi var, sadece herkesin sandığı yönde değil.
 
 Model, hiçbir şey bilmeyen bir tahmincinin yaklaşık altı puan önüne geçebiliyor. Etkileyici bir rakam değil ve olmasını da beklememeliyiz.
 
