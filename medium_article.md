@@ -6,8 +6,6 @@ Bir süre önce Christopher Nolan'ın bir röportajına denk geldim. Kendisine s
 
 Cevabı netti. Hayır.
 
-İkna olmamıştım. Çünkü aklıma hemen Avatar geldi.
-
 James Cameron 2009'da Avatar'ı çekmek için 237 milyon dolar harcadı. Film dünya çapında 2,78 milyar dolar hasılat yaptı. Bütçesinin yaklaşık on iki katı. Bugün bunu bir başarı hikâyesi olarak anlatıyoruz, ama 2007'de o parayı onaylayan yöneticiler için ortada hikâye falan yoktu. Sadece bir bahis vardı.
 
 Ortada bir çelişki var gibiydi. Sinemanın en tanınmış yönetmenlerinden biri paranın başarıyı satın almadığını söylüyordu; sektörün en büyük başarı hikâyesi ise tarihin en pahalı bahislerinden biriydi.
